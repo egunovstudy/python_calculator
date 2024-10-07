@@ -23,27 +23,32 @@ class Multiply(Expression):
 
 class Divide(Expression):
     def apply(self, left, right):
-        return left / right
+        return right / left
 
 
 class LeftParenthesis(Expression):
 
     def apply(self, left: int, right: int):
-        super().apply(left, right)
+        pass
+
+
+class Power(Expression):
+    def apply(self, left: int, right: int):
+        return right ** left
 
 
 if __name__ == '__main__':
 
     while True:
-        inp = input('''Enter expression in enclosing parenthesis (e.g. ((2 + 2) * 2)
-                        For exit enter \'exit\'\n''').replace(' ', '')
+        inp = input('''Enter expression in enclosing parenthesis and separated by whitespaces (e.g. ( ( 2 + 2 ) * 2)
+                        For exit enter \'exit\'\n''')
         if inp == 'exit':
             print("Good Bye! ")
             exit(0)
 
         operator_stack: deque[Expression] = deque()
         values_stack: deque[int] = deque()
-        for ch in inp:
+        for ch in inp.split(' '):
             if ch.isdigit():
                 values_stack.append(int(ch))
             elif ch == '+':
@@ -53,7 +58,9 @@ if __name__ == '__main__':
             elif ch == '*':
                 operator_stack.append(Multiply())
             elif ch == '/':
-                operator_stack.append(Subtract())
+                operator_stack.append(Divide())
+            elif ch == '^':
+                operator_stack.append(Power())
             elif ch == '(':
                 operator_stack.append(LeftParenthesis())
             elif ch == ')':
